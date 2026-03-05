@@ -3,7 +3,7 @@
 #include <random>
 
 unsigned* generate_array(int N, std::default_random_engine& rng) {
-    std::uniform_int_distribution<unsigned> dstr(0, 999);
+    std::uniform_int_distribution<unsigned> dstr(0, 999999);
     unsigned *ptr = new unsigned[N];
     for (int idx = 0; idx < N; ++idx) {
         ptr[idx] = dstr(rng);
@@ -41,13 +41,11 @@ bool sum_fast(unsigned* arr, int n, int target) {
 }
 
 int main() {
-    int sizes[] = {500, 1000, 5000, 10000, 50000, 100000, 150000};
+    int sizes[] = {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000};
     
     unsigned seed = 12345;
     std::default_random_engine rng(seed);
     
-    std::cout << "Сид: " << seed << std::endl;
-    std::cout << "N,BruteForce(мкс),Fast(мкс)" << std::endl;
 
     for (int n : sizes) {
         unsigned* data = generate_array(n, rng);
@@ -58,23 +56,23 @@ int main() {
         }
         insertion_sort(sorted_data, n);
         
-        std::uniform_int_distribution<int> target_dist(10, 2000);
-        int target = target_dist(rng);
-
+        int target = 2000000;
+        
         auto start = std::chrono::steady_clock::now();
         sum_brute(data, n, target);
         auto end = std::chrono::steady_clock::now();
-        long long t_brute = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-
+        double t_brute = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        
         start = std::chrono::steady_clock::now();
-        for(int i = 0; i < 1000; i++) sum_fast(sorted_data, n, target);
+        sum_fast(sorted_data, n, target);
         end = std::chrono::steady_clock::now();
-        double t_fast = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-        std::cout << n << "," << t_brute << "," << t_fast << std::endl;
+        double t_fast = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        
+        std::cout << n << "\t" << t_brute << "\t\t" << t_fast << std::endl;
         
         delete[] data;
         delete[] sorted_data;
     }
+    
     return 0;
 }

@@ -42,13 +42,13 @@ void insertion_sort(unsigned* arr, int n) {
 }
 
 int main() {
-    int sizes[] = {500, 1000, 10000, 100000, 200000};
+    int sizes[] = {500,1000,5000,10000,12500,15000,20000,25000,30000,35000,100000,150000};
     
     unsigned seed = 12345;
     std::default_random_engine rng(seed);
 
     std::cout << "Сид: " << seed << std::endl;
-    std::cout << "N,LinearSearch(мкс),BinarySearch(мкс)" << std::endl;
+
 
     for (int n : sizes) {
         unsigned* data = generate_array(n, rng);
@@ -68,7 +68,7 @@ int main() {
         end = std::chrono::steady_clock::now();
         double t_bin = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 10000.0 / 1000.0;
 
-        std::cout << n << "," << t_lin << "," << t_bin << std::endl;
+        std::cout << n << " " << t_lin << " " << t_bin << std::endl;
         
         delete[] data;
         delete[] sorted_data;
