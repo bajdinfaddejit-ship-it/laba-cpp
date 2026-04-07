@@ -1,2 +1,0 @@
-# laba-cpp
-# laba-cpp
