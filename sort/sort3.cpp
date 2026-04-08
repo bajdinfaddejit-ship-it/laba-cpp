@@ -5,6 +5,15 @@
 
 unsigned long long swaps = 0;
 
+unsigned* generate_array(int N, std::default_random_engine& rng) {
+    std::uniform_int_distribution<unsigned> dstr(0, 999);
+    unsigned *ptr = new unsigned[N];
+    for (int idx = 0; idx < N; ++idx) {
+        ptr[idx] = dstr(rng);
+    }
+    return ptr;
+}
+
 void shell_step(unsigned arr[], int n, int gap) {
     for (int i = gap; i < n; i++) {
         unsigned temp = arr[i];
@@ -25,10 +34,9 @@ void shell_classic(unsigned arr[], int n) {
 }
 
 void shell_hibbard(unsigned arr[], int n) {
-    int gaps[32]; // Статический массив для шагов
+    int gaps[32];
     int count = 0;
     int h = 1;
-    // Генерируем 2^i - 1: 1, 3, 7, 15...
     while (h <= n) {
         gaps[count++] = h;
         h = (h + 1) * 2 - 1;
@@ -39,7 +47,7 @@ void shell_hibbard(unsigned arr[], int n) {
 }
 
 void shell_fibonacci(unsigned arr[], int n) {
-    int gaps[45]; // Числа Фибоначчи до 2^31
+    int gaps[45];
     int a = 1, b = 1;
     int count = 0;
     while (b <= n) {
@@ -54,17 +62,15 @@ void shell_fibonacci(unsigned arr[], int n) {
 }
 
 int main() {
+    unsigned const_seed = 42; 
+    std::default_random_engine rng(const_seed);
     std::ofstream out("shell_results.csv");
     out << "Size,Algo,Time,Swaps\n";
-    
-    std::default_random_engine rng(42);
-    std::uniform_int_distribution<unsigned> dist(0, 100000);
 
     for (int n = 100; n <= 10000; n += 500) {
-        unsigned* orig = new unsigned[n];
-        for (int i = 0; i < n; i++) orig[i] = dist(rng);
+        unsigned* orig = generate_array(n, rng);
 
-        // Тест Classic
+        // Test Classic
         {
             unsigned* copy = new unsigned[n];
             for (int i = 0; i < n; i++) copy[i] = orig[i];
@@ -77,7 +83,7 @@ int main() {
             delete[] copy;
         }
 
-        // Тест Hibbard
+        // Test Hibbard
         {
             unsigned* copy = new unsigned[n];
             for (int i = 0; i < n; i++) copy[i] = orig[i];
@@ -90,7 +96,7 @@ int main() {
             delete[] copy;
         }
 
-        // Тест Fibonacci
+        // Test Fibonacci
         {
             unsigned* copy = new unsigned[n];
             for (int i = 0; i < n; i++) copy[i] = orig[i];
@@ -104,6 +110,7 @@ int main() {
         }
 
         delete[] orig;
+        std::cout << "N = " << n << " processed." << std::endl;
     }
     out.close();
     return 0;

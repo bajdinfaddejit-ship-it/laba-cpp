@@ -12,6 +12,15 @@ void swap(unsigned &a, unsigned &b) {
     current_swaps++;
 }
 
+unsigned* generate_array(int N, std::default_random_engine& rng) {
+    std::uniform_int_distribution<unsigned> dstr(0, 999);
+    unsigned *ptr = new unsigned[N];
+    for (int idx = 0; idx < N; ++idx) {
+        ptr[idx] = dstr(rng);
+    }
+    return ptr;
+}
+
 bool check_and_swap_with_gap(unsigned arr[], unsigned n, unsigned gap) {
     bool swapped = false;
     for (unsigned i = 0; i + gap < n; ++i) {
@@ -35,15 +44,14 @@ void comb_sort(unsigned arr[], unsigned n) {
 }
 
 int main() {
-    std::default_random_engine rng(std::chrono::steady_clock::now().time_since_epoch().count());
-    std::uniform_int_distribution<unsigned> dstr(0, 10000);
+    unsigned seed = 10;
+    std::default_random_engine rng(seed);  // Исправлено: создание генератора
     std::ofstream out("comb_sort_data.csv");
 
     out << "Size,Time,Swaps\n";
 
     for (int n = 100; n <= 10000; n += 500) {
-        unsigned* arr = new unsigned[n];
-        for (int i = 0; i < n; i++) arr[i] = dstr(rng);
+        unsigned* arr = generate_array(n, rng);
 
         current_swaps = 0;
         auto start = std::chrono::high_resolution_clock::now();

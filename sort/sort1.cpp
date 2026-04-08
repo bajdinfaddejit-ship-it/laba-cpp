@@ -50,7 +50,7 @@ void print_array(unsigned arr[], int N) {
 }
 
 int main() {
-    unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
+    unsigned seed = 10;
     std::default_random_engine rng(seed);
     int N = 10;
 
