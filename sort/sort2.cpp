@@ -45,7 +45,7 @@ void comb_sort(unsigned arr[], unsigned n) {
 
 int main() {
     unsigned seed = 10;
-    std::default_random_engine rng(seed);  // Исправлено: создание генератора
+    std::default_random_engine rng(seed);
     std::ofstream out("comb_sort_data.csv");
 
     out << "Size,Time,Swaps\n";
