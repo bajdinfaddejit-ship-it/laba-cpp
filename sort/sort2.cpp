@@ -44,7 +44,7 @@ void comb_sort(unsigned arr[], unsigned n) {
 }
 
 int main() {
-    unsigned seed = 10;
+    unsigned seed = 42;
     std::default_random_engine rng(seed);
     std::ofstream out("comb_sort_data.csv");
 

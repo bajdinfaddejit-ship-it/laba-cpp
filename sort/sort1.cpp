@@ -50,7 +50,7 @@ void print_array(unsigned arr[], int N) {
 }
 
 int main() {
-    unsigned seed = 10;
+    unsigned seed = 42;
     std::default_random_engine rng(seed);
     int N = 10;
 
